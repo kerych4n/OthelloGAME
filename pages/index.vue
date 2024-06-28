@@ -25,7 +25,7 @@
           <span class="text-xl">{{ whiteScore }}</span>
         </div>
       </div>
-      <Board :key="boardKey" :playerNames="playerNames" @update-score="updateScore" @player-pass="handlePass" />
+      <Board :key="boardKey" :playerNames="playerNames" @update-score="updateScore" ref="boardRef" />
       <div class="button-container flex gap-4 mt-4">
         <button @click="resetBoard" class="reset-button">リセット</button>
         <button @click="passTurn" class="pass-button">パス</button>
@@ -63,10 +63,6 @@ const resetBoard = () => {
 const updateScore = (black, white) => {
   blackScore.value = black;
   whiteScore.value = white;
-};
-
-const handlePass = () => {
-  // パスの処理をここに追加できます
 };
 
 const passTurn = () => {
