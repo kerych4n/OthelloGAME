@@ -4,12 +4,12 @@
     <div v-if="!gameStarted" class="flex flex-col items-center">
       <div class="player-names flex flex-col gap-4 mb-4">
         <label class="flex flex-col">
-          黒のプレイヤー名:
-          <input v-model="playerNames.black" class="border border-gray-300 p-2 rounded" />
+          プレイヤー1:
+          <input v-model="playerNames.player1" class="border border-gray-300 p-2 rounded" />
         </label>
         <label class="flex flex-col">
-          白のプレイヤー名:
-          <input v-model="playerNames.white" class="border border-gray-300 p-2 rounded" />
+          プレイヤー2:
+          <input v-model="playerNames.player2" class="border border-gray-300 p-2 rounded" />
         </label>
       </div>
       <button @click="startGame" class="start-button">ゲーム開始</button>
@@ -17,11 +17,11 @@
     <div v-else class="flex flex-col items-center">
       <div class="score-board flex justify-around items-center w-64 p-4 mb-4 bg-white shadow-md rounded-lg">
         <div class="score black flex flex-col items-center">
-          <span class="text-lg font-bold text-black">{{ playerNames.black }}</span>
+          <span class="text-lg font-bold text-black">{{ blackPlayerName }}</span>
           <span class="text-xl">{{ blackScore }}</span>
         </div>
         <div class="score white flex flex-col items-center">
-          <span class="text-lg font-bold text-black">{{ playerNames.white }}</span>
+          <span class="text-lg font-bold text-white">{{ whitePlayerName }}</span>
           <span class="text-xl">{{ whiteScore }}</span>
         </div>
       </div>
@@ -39,17 +39,33 @@ import { ref } from 'vue';
 import Board from '~/components/Board.vue';
 
 const gameStarted = ref(false);
-const playerNames = ref({ black: '', white: '' });
+const playerNames = ref({ player1: '', player2: '' });
 const boardKey = ref(0);
 const blackScore = ref(2);
 const whiteScore = ref(2);
+const boardRef = ref(null);
+const blackPlayerName = ref('');
+const whitePlayerName = ref('');
 
 const startGame = () => {
-  if (playerNames.value.black && playerNames.value.white) {
+  if (playerNames.value.player1 && playerNames.value.player2) {
     gameStarted.value = true;
+    assignColors();
   } else {
     alert("両方のプレイヤー名を入力してください");
   }
+};
+
+const assignColors = () => {
+  const random = Math.random();
+  if (random < 0.5) {
+    blackPlayerName.value = playerNames.value.player1;
+    whitePlayerName.value = playerNames.value.player2;
+  } else {
+    blackPlayerName.value = playerNames.value.player2;
+    whitePlayerName.value = playerNames.value.player1;
+  }
+  alert(`${blackPlayerName.value}さんは黒、${whitePlayerName.value}さんは白です`);
 };
 
 const resetBoard = () => {
@@ -57,7 +73,7 @@ const resetBoard = () => {
   blackScore.value = 2;
   whiteScore.value = 2;
   gameStarted.value = false;
-  playerNames.value = { black: '', white: '' };
+  playerNames.value = { player1: '', player2: '' };
 };
 
 const updateScore = (black, white) => {
@@ -66,10 +82,7 @@ const updateScore = (black, white) => {
 };
 
 const passTurn = () => {
-  const boardComponent = document.querySelector('.board');
-  if (boardComponent && boardComponent.__vueParentComponent.ctx.passTurn) {
-    boardComponent.__vueParentComponent.ctx.passTurn();
-  }
+  boardRef.value.passTurn();
 };
 </script>
 

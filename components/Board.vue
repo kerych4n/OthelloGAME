@@ -157,7 +157,7 @@ const passTurn = () => {
 };
 
 const updateCurrentPlayerName = () => {
-  currentPlayerName.value = currentPlayer.value === 'B' ? props.playerNames.black : props.playerNames.white;
+  currentPlayerName.value = currentPlayer.value === 'B' ? props.playerNames.player1 : props.playerNames.player2;
 };
 </script>
 
