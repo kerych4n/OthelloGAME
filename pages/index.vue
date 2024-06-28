@@ -5,10 +5,10 @@
       <div>黒: {{ blackScore }}</div>
       <div>白: {{ whiteScore }}</div>
     </div>
-    <Board :key="boardKey" @update-score="updateScore" />
-    <div class="button-container">
+    <Board :key="boardKey" @update-score="updateScore" ref="boardComponent" :pass-turn="passTurnFlag" />
+    <div class="button-group">
       <button @click="resetBoard" class="reset-button">リセット</button>
-      <button @click="passBoard" class="pass-button">パス</button>
+      <button @click="passTurn" class="pass-button">パス</button>
     </div>
   </div>
 </template>
@@ -17,20 +17,28 @@
 import { ref } from 'vue';
 import Board from '~/components/Board.vue';
 
-const boardKey = ref(0); // Board コンポーネントのキー
+const boardKey = ref(0);
 const blackScore = ref(2);
 const whiteScore = ref(2);
+const currentPlayer = ref('B');
+const passTurnFlag = ref(false);
+const boardComponent = ref(null);
 
-// リセットボタンをクリックしたときの処理
 const resetBoard = () => {
-  boardKey.value += 1; // Board コンポーネントのキーを更新して再レンダリングを強制
+  boardKey.value += 1;
   blackScore.value = 2;
   whiteScore.value = 2;
+  currentPlayer.value = 'B';
 };
 
 const updateScore = (black, white) => {
   blackScore.value = black;
   whiteScore.value = white;
+};
+
+const passTurn = () => {
+  currentPlayer.value = currentPlayer.value === 'B' ? 'W' : 'B';
+  passTurnFlag.value = !passTurnFlag.value; // パスイベントをトリガーするためにフラグをトグル
 };
 </script>
 
@@ -51,7 +59,7 @@ const updateScore = (black, white) => {
   margin-bottom: 10px;
 }
 
-.button-container {
+.button-group {
   display: flex;
   gap: 10px;
   margin-top: 20px;
