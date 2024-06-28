@@ -1,8 +1,5 @@
 <template>
   <div class="board-container">
-    <div class="info">
-      <h2>現在のプレイヤー: {{ currentPlayerName }}</h2>
-    </div>
     <div class="board">
       <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
         <div v-for="(cell, colIndex) in row" :key="colIndex" 
