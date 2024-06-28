@@ -31,13 +31,14 @@ import { ref, onMounted, watchEffect, defineEmits, defineProps, watch } from 'vu
 
 const emit = defineEmits(['update-score', 'player-pass']);
 const props = defineProps({
-  passTurn: Boolean
+  passTurn: Boolean,
+  playerNames: Object
 });
 
 const board = ref([]);
 const currentPlayer = ref('B');
 const scores = ref({ black: 0, white: 0 });
-const playerNames = ref({ black: '黒', white: '白' });
+const playerNames = ref(props.playerNames);
 const currentPlayerName = ref(playerNames.value.black);
 
 const savePlayerNames = () => {
