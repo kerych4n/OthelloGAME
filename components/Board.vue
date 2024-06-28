@@ -23,7 +23,7 @@ const props = defineProps({
   playerNames: Object
 });
 
-const emit = defineEmits(['update-score', 'player-pass']);
+const emit = defineEmits(['update-score', 'player-pass', 'update-current-player']);
 
 const board = ref([]);
 const currentPlayer = ref('B');
@@ -157,7 +157,8 @@ const passTurn = () => {
 };
 
 const updateCurrentPlayerName = () => {
-  currentPlayerName.value = currentPlayer.value === 'B' ? props.playerNames.player1 : props.playerNames.player2;
+  currentPlayerName.value = currentPlayer.value === 'B' ? props.playerNames.black : props.playerNames.white;
+  emit('update-current-player', currentPlayer.value);
 };
 </script>
 
